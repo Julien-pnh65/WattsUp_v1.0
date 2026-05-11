@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WattsUp · Feedback Bêta</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0a0d11;
+  --bg-card: #111520;
+  --bg-elevated: #161c26;
+  --accent: #00FFB2;
+  --accent-glow: rgba(0,255,178,0.15);
+  --accent-cool: #4FC3F7;
+  --ink: #e6e4df;
+  --ink-dim: #8a8a8a;
+  --ink-faint: #444;
+  --line: rgba(255,255,255,0.07);
+  --danger: #FF4D4D;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Fond animé */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 10%, rgba(0,255,178,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 10% 80%, rgba(79,195,247,0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 48px 0 40px;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-tag {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid rgba(0,255,178,0.3);
+  border-radius: 20px;
+  padding: 5px 14px;
+  margin-bottom: 20px;
+}
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 10vw, 80px);
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.hero-title span { color: var(--accent); }
+.hero-sub {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--ink-dim);
+  margin-top: 16px;
+  line-height: 1.6;
+}
+.hero-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  margin: 24px auto 0;
+  opacity: 0.4;
+}
+
+/* CARD */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 16px;
+  animation: fadeUp 0.6s ease both;
+}
+.card:nth-child(2) { animation-delay: 0.05s; }
+.card:nth-child(3) { animation-delay: 0.1s; }
+.card:nth-child(4) { animation-delay: 0.15s; }
+.card:nth-child(5) { animation-delay: 0.2s; }
+.card:nth-child(6) { animation-delay: 0.25s; }
+.card:nth-child(7) { animation-delay: 0.3s; }
+.card:nth-child(8) { animation-delay: 0.35s; }
+
+.q-num {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+  opacity: 0.7;
+}
+.q-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+.q-hint {
+  font-size: 10px;
+  color: var(--ink-faint);
+  margin-top: -14px;
+  margin-bottom: 16px;
+}
+
+/* ÉTOILES / NOTE */
+.stars {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.star {
+  font-size: 32px;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+  filter: grayscale(1) brightness(0.4);
+  user-select: none;
+}
+.star:hover, .star.active {
+  filter: none;
+  transform: scale(1.15);
+}
+.star-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--ink-faint);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+/* TAGS */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag {
+  padding: 8px 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  color: var(--ink-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.tag:hover { border-color: rgba(0,255,178,0.3); color: var(--ink); }
+.tag.selected {
+  background: rgba(0,255,178,0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* CHOIX UNIQUE */
+.choices { display: flex; flex-direction: column; gap: 8px; }
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+.choice:hover { border-color: rgba(0,255,178,0.3); color: var(--ink); }
+.choice.selected {
+  background: rgba(0,255,178,0.07);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.choice-dot {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-faint);
+  flex-shrink: 0;
+  transition: all 0.15s;
+  position: relative;
+}
+.choice.selected .choice-dot {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+.choice.selected .choice-dot::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: var(--bg);
+  border-radius: 50%;
+}
+.choice-label { flex: 1; }
+.choice-sub {
+  font-size: 10px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+/* TEXTAREA */
+textarea {
+  width: 100%;
+  min-height: 110px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 14px;
+  resize: vertical;
+  line-height: 1.7;
+  transition: border-color 0.15s;
+  outline: none;
+}
+textarea:focus { border-color: rgba(0,255,178,0.4); }
+textarea::placeholder { color: var(--ink-faint); }
+
+/* SUBMIT */
+.submit-btn {
+  width: 100%;
+  padding: 18px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.submit-btn:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,255,178,0.3);
+}
+.submit-btn:active { transform: translateY(0); }
+
+/* CONFIRMATION */
+.confirmation {
+  display: none;
+  text-align: center;
+  padding: 60px 20px;
+  animation: fadeUp 0.5s ease both;
+}
+.confirmation-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+  animation: pop 0.4s ease both;
+}
+.confirmation-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.confirmation-sub {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+/* PROGRESS */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+  z-index: 100;
+  box-shadow: 0 0 8px var(--accent);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  80% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .card { padding: 20px; }
+  .stars { gap: 6px; }
+  .star { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress-bar" style="width:0%"></div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Bêta Test · Version 1.0</div>
+    <div class="hero-title">WATTS<span>UP</span></div>
+    <div class="hero-sub">Tu as testé l'app — dis-nous ce que tu en penses.<br>3 minutes, ça nous aide vraiment.</div>
+    <div class="hero-divider"></div>
+  </div>
+
+  <div id="form-content">
+
+    <!-- Q1 - NIVEAU -->
+    <div class="card">
+      <div class="q-num">01 · Profil</div>
+      <div class="q-title">Tu te définirais comme...</div>
+      <div class="choices" id="q-niveau">
+        <div class="choice" onclick="selectChoice('q-niveau', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">
+            🟢 Débutant
+            <div class="choice-sub">Je pédale depuis moins d'un an</div>
+          </div>
+        </div>
+        <div class="choice" onclick="selectChoice('q-niveau', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">
+            🔵 Intermédiaire
+            <div class="choice-sub">Quelques sorties régulières par semaine</div>
+          </div>
+        </div>
+        <div class="choice" onclick="selectChoice('q-niveau', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">
+            🟡 Régulier sérieux
+            <div class="choice-sub">Gran fondo, sorties club, objectifs perso</div>
+          </div>
+        </div>
+        <div class="choice" onclick="selectChoice('q-niveau', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">
+            🔴 Compétiteur
+            <div class="choice-sub">Courses, préparation structurée</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 - NOTE -->
+    <div class="card">
+      <div class="q-num">02 · Note globale</div>
+      <div class="q-title">Quelle note donnes-tu à WattsUp ?</div>
+      <div class="stars" id="stars">
+        <span class="star" onclick="selectStar(1)">⭐</span>
+        <span class="star" onclick="selectStar(2)">⭐</span>
+        <span class="star" onclick="selectStar(3)">⭐</span>
+        <span class="star" onclick="selectStar(4)">⭐</span>
+        <span class="star" onclick="selectStar(5)">⭐</span>
+      </div>
+      <div class="star-labels"><span>Décevant</span><span>Excellent</span></div>
+    </div>
+
+    <!-- Q3 - FEATURES UTILISÉES -->
+    <div class="card">
+      <div class="q-num">03 · Usage</div>
+      <div class="q-title">Ce que tu as utilisé</div>
+      <div class="q-hint">Plusieurs choix possibles</div>
+      <div class="tags" id="q-features">
+        <div class="tag" onclick="toggleTag(this)">Générateur IA</div>
+        <div class="tag" onclick="toggleTag(this)">Import GPX / FIT</div>
+        <div class="tag" onclick="toggleTag(this)">Suivi des sorties</div>
+        <div class="tag" onclick="toggleTag(this)">Mon Plan</div>
+        <div class="tag" onclick="toggleTag(this)">Dashboard</div>
+        <div class="tag" onclick="toggleTag(this)">Profil</div>
+        <div class="tag" onclick="toggleTag(this)">Zones FC</div>
+      </div>
+    </div>
+
+    <!-- Q4 - RESSENTI -->
+    <div class="card">
+      <div class="q-num">04 · Ressenti</div>
+      <div class="q-title">L'app te semble...</div>
+      <div class="q-hint">Plusieurs choix possibles</div>
+      <div class="tags" id="q-ressenti">
+        <div class="tag" onclick="toggleTag(this)">Facile à utiliser</div>
+        <div class="tag" onclick="toggleTag(this)">Design agréable</div>
+        <div class="tag" onclick="toggleTag(this)">Trop complexe</div>
+        <div class="tag" onclick="toggleTag(this)">Manque de fonctions</div>
+        <div class="tag" onclick="toggleTag(this)">Motivante</div>
+        <div class="tag" onclick="toggleTag(this)">Lente ou bugguée</div>
+        <div class="tag" onclick="toggleTag(this)">Adaptée à mon niveau</div>
+        <div class="tag" onclick="toggleTag(this)">Trop technique</div>
+      </div>
+    </div>
+
+    <!-- Q5 - WISHLIST -->
+    <div class="card">
+      <div class="q-num">05 · Wishlist</div>
+      <div class="q-title">Ce que tu voudrais en plus</div>
+      <div class="q-hint">Plusieurs choix possibles</div>
+      <div class="tags" id="q-wishlist">
+        <div class="tag" onclick="toggleTag(this)">Sync auto Strava</div>
+        <div class="tag" onclick="toggleTag(this)">Sync auto Garmin</div>
+        <div class="tag" onclick="toggleTag(this)">App mobile</div>
+        <div class="tag" onclick="toggleTag(this)">Compte / Login</div>
+        <div class="tag" onclick="toggleTag(this)">Plan sur plusieurs semaines</div>
+        <div class="tag" onclick="toggleTag(this)">Notifications entraînement</div>
+        <div class="tag" onclick="toggleTag(this)">Communauté & défis</div>
+        <div class="tag" onclick="toggleTag(this)">Stats avancées</div>
+        <div class="tag" onclick="toggleTag(this)">Mode hors-ligne</div>
+      </div>
+    </div>
+
+    <!-- Q6 - MODÈLE ÉCONOMIQUE -->
+    <div class="card">
+      <div class="q-num">06 · Modèle</div>
+      <div class="q-title">Comment préférerais-tu accéder à WattsUp ?</div>
+      <div class="choices" id="q-modele">
+        <div class="choice" onclick="selectChoice('q-modele', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">
+            🆓 Gratuit avec publicité
+            <div class="choice-sub">Accès total, quelques pubs discrètes</div>
+          </div>
+        </div>
+        <div class="choice" onclick="selectChoice('q-modele', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">
+            ⚡ Payer par génération de plan
+            <div class="choice-sub">Ex : 0,10€ par plan généré par l'IA</div>
+          </div>
+        </div>
+        <div class="choice" onclick="selectChoice('q-modele', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">
+            📅 Petit abonnement mensuel
+            <div class="choice-sub">Ex : 3 à 5€/mois, accès illimité</div>
+          </div>
+        </div>
+        <div class="choice" onclick="selectChoice('q-modele', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">
+            ❌ Je ne paierais pas
+            <div class="choice-sub">Gratuit uniquement</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q7 - RECOMMANDATION -->
+    <div class="card">
+      <div class="q-num">07 · Bouche à oreille</div>
+      <div class="q-title">Tu recommanderais WattsUp à un ami cycliste ?</div>
+      <div class="choices" id="q-reco">
+        <div class="choice" onclick="selectChoice('q-reco', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">👍 Oui, sans hésiter</div>
+        </div>
+        <div class="choice" onclick="selectChoice('q-reco', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">🤔 Peut-être, une fois améliorée</div>
+        </div>
+        <div class="choice" onclick="selectChoice('q-reco', this)">
+          <div class="choice-dot"></div>
+          <div class="choice-label">👎 Non, pas dans l'état actuel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Q8 - COMMENTAIRE -->
+    <div class="card">
+      <div class="q-num">08 · Commentaire libre</div>
+      <div class="q-title">Un bug ? Une idée ? Dis-nous tout</div>
+      <textarea id="q-commentaire" placeholder="Ex : J'ai eu un souci avec l'import GPX, j'aimerais voir mes stats par mois, le design est top mais..."></textarea>
+    </div>
+
+    <!-- SUBMIT -->
+    <button class="submit-btn" onclick="soumettre()">ENVOYER MON FEEDBACK →</button>
+
+  </div>
+
+  <!-- CONFIRMATION -->
+  <div class="confirmation" id="confirmation">
+    <div class="confirmation-icon">🚴</div>
+    <div class="confirmation-title">MERCI !</div>
+    <div class="confirmation-sub">Ton feedback a bien été reçu.<br>Il nous aide directement à améliorer WattsUp.<br><br>On te tient au courant de la suite 🤙</div>
+  </div>
+
+</div>
+
+<script>
+let note = 0;
+
+function updateProgress() {
+  const fields = ['q-niveau', 'q-modele', 'q-reco'];
+  let filled = (note > 0 ? 1 : 0);
+  fields.forEach(id => {
+    if (document.querySelector(`#${id} .choice.selected`)) filled++;
+  });
+  const pct = Math.round((filled / 4) * 100);
+  document.getElementById('progress-bar').style.width = pct + '%';
+}
+
+function selectStar(val) {
+  note = val;
+  document.querySelectorAll('.star').forEach((s, i) => {
+    s.classList.toggle('active', i < val);
+  });
+  updateProgress();
+}
+
+function toggleTag(el) {
+  el.classList.toggle('selected');
+}
+
+function selectChoice(groupId, el) {
+  document.querySelectorAll(`#${groupId} .choice`).forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  updateProgress();
+}
+
+function soumettre() {
+  // Validation minimale
+  if (!note) { alert('Merci de donner une note (question 2) avant d\'envoyer !'); return; }
+
+  const niveau = document.querySelector('#q-niveau .choice.selected')?.querySelector('.choice-label')?.childNodes[0]?.textContent?.trim() || 'Non renseigné';
+  const modele = document.querySelector('#q-modele .choice.selected')?.querySelector('.choice-label')?.childNodes[0]?.textContent?.trim() || 'Non renseigné';
+  const reco = document.querySelector('#q-reco .choice.selected')?.querySelector('.choice-label')?.textContent?.trim() || 'Non renseigné';
+  const features = Array.from(document.querySelectorAll('#q-features .tag.selected')).map(t => t.textContent);
+  const ressenti = Array.from(document.querySelectorAll('#q-ressenti .tag.selected')).map(t => t.textContent);
+  const wishlist = Array.from(document.querySelectorAll('#q-wishlist .tag.selected')).map(t => t.textContent);
+  const commentaire = document.getElementById('q-commentaire').value.trim();
+
+  const data = {
+    date: new Date().toLocaleString('fr-FR'),
+    niveau,
+    note,
+    features_utilisees: features,
+    ressenti,
+    wishlist,
+    modele_economique: modele,
+    recommandation: reco,
+    commentaire
+  };
+
+  // Sauvegarder localement
+  const all = JSON.parse(localStorage.getItem('wattsup_feedbacks') || '[]');
+  all.push(data);
+  localStorage.setItem('wattsup_feedbacks', JSON.stringify(all));
+
+  // Log console pour récupération
+  console.log('%c📊 NOUVEAU FEEDBACK', 'color:#00FFB2;font-size:14px;font-weight:bold;');
+  console.log(JSON.stringify(data, null, 2));
+  console.log('%c📊 TOUS LES FEEDBACKS (' + all.length + ')', 'color:#00FFB2;font-size:14px;font-weight:bold;');
+  console.log(JSON.stringify(all, null, 2));
+
+  // Afficher confirmation
+  document.getElementById('form-content').style.display = 'none';
+  document.getElementById('confirmation').style.display = 'block';
+  document.getElementById('progress-bar').style.width = '100%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
