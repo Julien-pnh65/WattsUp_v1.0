@@ -555,8 +555,7 @@ function selectChoice(groupId, el) {
   updateProgress();
 }
 
-function soumettre() {
-  // Validation minimale
+async function soumettre() {
   if (!note) { alert('Merci de donner une note (question 2) avant d\'envoyer !'); return; }
 
   const niveau = document.querySelector('#q-niveau .choice.selected')?.querySelector('.choice-label')?.childNodes[0]?.textContent?.trim() || 'Non renseigné';
@@ -567,34 +566,44 @@ function soumettre() {
   const wishlist = Array.from(document.querySelectorAll('#q-wishlist .tag.selected')).map(t => t.textContent);
   const commentaire = document.getElementById('q-commentaire').value.trim();
 
-  const data = {
-    date: new Date().toLocaleString('fr-FR'),
+  const btn = document.querySelector('.submit-btn');
+  btn.textContent = 'ENVOI EN COURS...';
+  btn.disabled = true;
+
+  const formData = {
     niveau,
-    note,
-    features_utilisees: features,
-    ressenti,
-    wishlist,
+    note: note + '/5',
+    features_utilisees: features.join(', ') || 'Aucune sélectionnée',
+    ressenti: ressenti.join(', ') || 'Aucun sélectionné',
+    wishlist: wishlist.join(', ') || 'Aucune sélectionnée',
     modele_economique: modele,
     recommandation: reco,
-    commentaire
+    commentaire: commentaire || 'Aucun commentaire',
+    date: new Date().toLocaleString('fr-FR')
   };
 
-  // Sauvegarder localement
-  const all = JSON.parse(localStorage.getItem('wattsup_feedbacks') || '[]');
-  all.push(data);
-  localStorage.setItem('wattsup_feedbacks', JSON.stringify(all));
+  try {
+    const resp = await fetch('https://formspree.io/f/mbdwqyjd', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(formData)
+    });
 
-  // Log console pour récupération
-  console.log('%c📊 NOUVEAU FEEDBACK', 'color:#00FFB2;font-size:14px;font-weight:bold;');
-  console.log(JSON.stringify(data, null, 2));
-  console.log('%c📊 TOUS LES FEEDBACKS (' + all.length + ')', 'color:#00FFB2;font-size:14px;font-weight:bold;');
-  console.log(JSON.stringify(all, null, 2));
-
-  // Afficher confirmation
-  document.getElementById('form-content').style.display = 'none';
-  document.getElementById('confirmation').style.display = 'block';
-  document.getElementById('progress-bar').style.width = '100%';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (resp.ok) {
+      document.getElementById('form-content').style.display = 'none';
+      document.getElementById('confirmation').style.display = 'block';
+      document.getElementById('progress-bar').style.width = '100%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      btn.textContent = 'ENVOYER MON FEEDBACK →';
+      btn.disabled = false;
+      alert('Erreur lors de l\'envoi. Réessaie dans un instant.');
+    }
+  } catch(e) {
+    btn.textContent = 'ENVOYER MON FEEDBACK →';
+    btn.disabled = false;
+    alert('Erreur réseau. Vérifie ta connexion et réessaie.');
+  }
 }
 </script>
 </body>
