@@ -286,7 +286,7 @@
   <nav class="nav">
     <button class="nav-btn active" onclick="showPage(&#39;accueil&#39;,this)">Dashboard</button>
     <button class="nav-btn" onclick="showPage(&#39;plan&#39;,this)">Mon Plan</button>
-    <button class="nav-btn" onclick="showPage(&#39;generateur&#39;,this)">Générateur</button>
+    <button class="nav-btn" onclick="showPage(&#39;generateur&#39;,this)">Mon Programme</button>
     <button class="nav-btn" onclick="showPage(&#39;suivi&#39;,this)">Suivi</button>
     <button class="nav-btn" onclick="showPage(&#39;sync&#39;,this)">Sync</button>
     <button class="nav-btn" onclick="showPage(&#39;profil&#39;,this)">Profil</button>
@@ -300,7 +300,7 @@
       <div class="onboarding-steps">
         <div class="ob-step" id="ob1" onclick="goToGen()">
           <div class="ob-num" id="ob1-num">01 · FAIRE</div>
-          <div class="ob-label">Générer mon plan</div>
+          <div class="ob-label">Construire mon plan</div>
           <div class="ob-desc">Dis-nous ton niveau et ton objectif, le programme s'adapte à ton profil.</div>
         </div>
         <div class="ob-step" id="ob2" onclick="showPage(&#39;sync&#39;, document.querySelectorAll(&#39;.nav-btn&#39;)[4])">
@@ -396,7 +396,7 @@
       <div class="section-num">04 / Prochaine séance</div>
       <div id="next-session-empty" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0;">
         <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:12px;color:var(--ink-faint);">Aucun plan actif.</span>
-        <button onclick="goToGen()" style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:#0a0f13;cursor:pointer;white-space:nowrap;flex-shrink:0;">✦ Générer mon plan</button>
+        <button onclick="goToGen()" style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;padding:8px 16px;border-radius:8px;border:none;background:var(--accent);color:#0a0f13;cursor:pointer;white-space:nowrap;flex-shrink:0;">Construire mon plan</button>
       </div>
       <div class="next-session" id="next-session-content" style="display:none;margin-top:4px;">
         <div class="next-day-badge">
@@ -418,7 +418,7 @@
       <div class="onboarding">
         <div class="onboarding-title">Aucun plan actif</div>
         <div class="onboarding-sub">Génère ton programme personnalisé pour le voir apparaître ici.</div>
-        <button class="btn-primary" style="max-width:280px;margin-top:0;" onclick="goToGen()">✦ Générer mon plan</button>
+        <button class="btn-primary" style="max-width:280px;margin-top:0;" onclick="goToGen()">Construire mon plan</button>
       </div>
     </div>
     <div id="plan-content" style="display:none;">
@@ -430,7 +430,7 @@
   <!-- GÉNÉRATEUR IA -->
   <div id="generateur" class="page">
     <div class="card">
-      <div class="section-num">Générateur</div>
+      <div class="section-num">Mon Programme</div>
       <div class="section-title">Créer mon plan</div>
 
       <div class="form-row">
@@ -494,9 +494,15 @@
 
       <div id="gen-spinner" class="spinner-wrap"><span class="spinner"></span><span id="gen-spinner-msg">Analyse de ton profil…</span></div>
       <div id="gen-error" class="error-box"></div>
+
+      <div id="plan-actif-banner" style="display:none;background:rgba(0,255,178,0.06);border:1px solid rgba(0,255,178,0.2);border-radius:10px;padding:14px 16px;margin-bottom:12px;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div style="font-family:JetBrains Mono,monospace;font-size:11px;color:var(--accent);">&#10003; Plan en cours — modifie ton profil pour en construire un nouveau</div>
+        <button onclick="annulerPlan()" style="background:transparent;border:1px solid var(--danger);color:var(--danger);border-radius:6px;padding:5px 12px;font-family:JetBrains Mono,monospace;font-size:10px;cursor:pointer;white-space:nowrap;letter-spacing:0.06em;">Abandonner ce plan</button>
+      </div>
+
       <div id="gen-result"></div>
-      <div id="week-nav" style="display:none;display:none;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;"></div>
-      <button class="btn-primary" id="btn-gen" onclick="genererPlan()">✦ Générer mon plan</button>
+      <div id="week-nav" style="display:none;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;"></div>
+      <button class="btn-primary" id="btn-gen" onclick="genererPlan()">Construire mon plan</button>
     </div>
   </div>
 
@@ -807,26 +813,53 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">FC max (bpm)</label>
-          <input type="number" id="p-fcmax" placeholder="182" min="140" max="220">
+          <input type="number" id="p-fcmax" placeholder="182" min="140" max="220" oninput="majAffichagePhysique()">
           <div class="info-box" id="fcmax-hint" style="margin-top:6px;display:none;"></div>
           <div class="info-box" style="margin-top:6px;">Utilisée pour calculer tes zones.</div>
         </div>
         <div class="form-group">
           <label class="form-label">FTP watts <span class="optional-tag">Optionnel</span></label>
-          <input type="number" id="p-ftp" placeholder="220" min="100" max="450">
+          <input type="number" id="p-ftp" placeholder="220" min="100" max="450" oninput="majAffichagePhysique()">
           <div class="ftp-hint" style="margin-top:6px;">Pas de capteur ? <strong>Laisse vide</strong> — le plan sera en FC.</div>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Poids (kg) <span class="optional-tag">Optionnel</span></label>
-          <input type="number" id="p-poids" placeholder="72" min="40" max="150">
+          <input type="number" id="p-poids" placeholder="72" min="40" max="150" oninput="majAffichagePhysique()">
           <div class="info-box" style="margin-top:6px;">Ratio W/kg calculé si FTP renseigné.</div>
         </div>
         <div class="form-group">
           <label class="form-label">FC repos (bpm) <span class="optional-tag">Optionnel</span></label>
-          <input type="number" id="p-fc-repos" placeholder="52" min="30" max="100">
+          <input type="number" id="p-fc-repos" placeholder="52" min="30" max="100" oninput="majAffichagePhysique()">
           <div class="info-box" style="margin-top:6px;">Affine les zones via méthode Karvonen.</div>
+        </div>
+      </div>
+
+      <!-- PANNEAU W/KG + ZONES — visible dès qu'un plan existe -->
+      <div id="physique-dashboard" style="display:none;margin-top:16px;border-top:1px solid var(--line);padding-top:16px;">
+        <div style="font-family:JetBrains Mono,monospace;font-size:9px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">Données calculées</div>
+
+        <!-- W/kg -->
+        <div id="wkg-block" style="display:none;background:rgba(0,255,178,0.05);border:1px solid rgba(0,255,178,0.15);border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+          <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;">
+            <span style="font-family:Bebas Neue,sans-serif;font-size:28px;color:var(--accent);letter-spacing:0.05em;" id="wkg-val">—</span>
+            <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--ink-dim);">W/kg</span>
+            <span style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--ink-dim);" id="wkg-cat"></span>
+          </div>
+          <div style="font-family:JetBrains Mono,monospace;font-size:9px;color:var(--ink-faint);margin-top:4px;">Référence : pros WorldTour ~6+ W/kg · Grimpeurs élite ~5.5 W/kg</div>
+        </div>
+
+        <!-- Zones FC -->
+        <div id="zones-fc-block" style="display:none;margin-bottom:10px;">
+          <div style="font-family:JetBrains Mono,monospace;font-size:9px;color:var(--ink-faint);margin-bottom:6px;" id="zones-fc-methode">Zones FC</div>
+          <div id="zones-fc-table" style="display:flex;flex-direction:column;gap:4px;"></div>
+        </div>
+
+        <!-- Zones Puissance -->
+        <div id="zones-power-block" style="display:none;">
+          <div style="font-family:JetBrains Mono,monospace;font-size:9px;color:var(--ink-faint);margin-bottom:6px;">Zones Puissance Coggan (FTP)</div>
+          <div id="zones-power-table" style="display:flex;flex-direction:column;gap:4px;"></div>
         </div>
       </div>
     </div>
@@ -996,7 +1029,7 @@ function renderSortieHTML(s, idx) {
       <div class="log-name" onclick="ouvrirEdition(${idx})" style="cursor:pointer;" title="Modifier">${s.nom}</div>
       <div class="log-sub">${s.durStr}${s.dplus?' · '+Number(s.dplus).toLocaleString()+'m D+':''}${badge}</div>
     </div>
-    <span class="log-dist">${parseFloat(s.km).toFixed(2)} <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint);">km</span></span>
+    <span class="log-dist">${parseFloat(s.km).toFixed(2)} <span style="font-family:JetBrains Mono,monospace;font-size:11px;color:var(--ink-faint);">km</span></span>
     <button onclick="supprimerSortie(${idx})" title="Supprimer" style="background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:14px;padding:4px 6px;border-radius:6px;transition:all 0.15s;flex-shrink:0;" onmouseover="this.style.color='var(--danger)';this.style.background='rgba(255,77,77,0.08)'" onmouseout="this.style.color='var(--ink-faint)';this.style.background='none'">✕</button>`;
   return entry;
 }
@@ -1014,7 +1047,7 @@ function filtrerLog(filtre, btn) {
     : sorties.filter(s => (s.nom || '').toLowerCase().includes(filtre.toLowerCase()) || (s.type || '') === filtre);
 
   if (!filtered.length) {
-    list.innerHTML = `<div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-faint);text-align:center;padding:20px 0;">Aucune sortie ${filtre !== 'tout' ? '"'+filtre+'"' : ''} enregistrée</div>`;
+    list.innerHTML = `<div style="font-family:JetBrains Mono,monospace;font-size:12px;color:var(--ink-faint);text-align:center;padding:20px 0;">Aucune sortie ${filtre !== 'tout' ? '"'+filtre+'"' : ''} enregistrée</div>`;
     return;
   }
   // On utilise les index dans le tableau original pour supprimerSortie
@@ -1053,7 +1086,7 @@ function supprimerSortie(idx) {
   list.innerHTML = '';
   if (!sorties.length) {
     firstLog = true;
-    list.innerHTML = '<div style="font-family:\'JetBrains Mono\',monospace;font-size:12px;color:var(--ink-faint);text-align:center;padding:24px 0;">Aucune sortie enregistrée</div>';
+    list.innerHTML = '<div style="font-family:JetBrains Mono,monospace;font-size:12px;color:var(--ink-faint);text-align:center;padding:24px 0;">Aucune sortie enregistrée</div>';
   } else {
     sorties.forEach((sv, i) => list.appendChild(renderSortieHTML(sv, i)));
   }
@@ -1309,6 +1342,8 @@ async function genererPlan() {
   const modeFC = document.getElementById('btn-fc').classList.contains('active');
   const fcmax = document.getElementById('fcmax').value;
   const ftp = document.getElementById('ftp').value;
+  const fcmaxNum = parseInt(fcmax) || 0;
+  const ftpNum = parseInt(ftp) || 0;
   const isBiere = niveau.includes('Bière')||objectif.includes('bière');
   const modeTexte = modeFC
     ? `Mode FC : FC max ${fcmax} bpm${ftp?', FTP '+ftp+'W':' (pas de capteur de puissance, zones FC uniquement)'}. Zones Z1 à Z5 en bpm.`
@@ -1393,29 +1428,6 @@ async function genererPlan() {
   const btn = document.getElementById('btn-gen');
   spinner.style.display='block'; errDiv.style.display='none'; result.innerHTML=''; btn.disabled=true;
 
-  // Calcul des zones FC si FCmax renseigné
-  const fcmaxNum = parseInt(fcmax) || 0;
-  const ftpNum = parseInt(ftp) || 0;
-  let zonesFC = '';
-  let zonesPower = '';
-  if (fcmaxNum > 0) {
-    const z1max = Math.round(fcmaxNum * 0.60);
-    const z2min = Math.round(fcmaxNum * 0.60); const z2max = Math.round(fcmaxNum * 0.70);
-    const z3min = Math.round(fcmaxNum * 0.70); const z3max = Math.round(fcmaxNum * 0.80);
-    const z4min = Math.round(fcmaxNum * 0.80); const z4max = Math.round(fcmaxNum * 0.90);
-    const z5min = Math.round(fcmaxNum * 0.90);
-    zonesFC = `Zones FC (FCmax ${fcmaxNum} bpm) : Z1 <${z1max} | Z2 ${z2min}-${z2max} | Z3 ${z3min}-${z3max} | Z4 ${z4min}-${z4max} | Z5 >${z5min} bpm.`;
-  }
-  if (ftpNum > 0) {
-    const p1 = Math.round(ftpNum * 0.55);
-    const p2min = Math.round(ftpNum * 0.56); const p2max = Math.round(ftpNum * 0.75);
-    const p3min = Math.round(ftpNum * 0.76); const p3max = Math.round(ftpNum * 0.90);
-    const p4min = Math.round(ftpNum * 0.91); const p4max = Math.round(ftpNum * 1.05);
-    const p5min = Math.round(ftpNum * 1.06);
-    zonesPower = `Zones Puissance (FTP ${ftpNum}W) : Z1 <${p1}W | Z2 ${p2min}-${p2max}W | Z3 ${p3min}-${p3max}W | Z4 ${p4min}-${p4max}W | Z5 >${p5min}W.`;
-  }
-  const zoneContext = [zonesFC, zonesPower].filter(Boolean).join(' ');
-
   // Nombre de semaines selon la durée choisie
   const semMatch = duree.match(/(\d+)/);
   const nbSemaines = semMatch ? Math.min(parseInt(semMatch[1]), 8) : 4;
@@ -1492,7 +1504,7 @@ Types : Repos, Endurance, Seuil, Intensité, Longue. charge = légère/modérée
     const badgeClass={Repos:'badge-repos',Endurance:'badge-endurance',Seuil:'badge-seuil',Intensité:'badge-intensite',Longue:'badge-sortie'};
     const chargeColor={'légère':'var(--accent)','modérée':'var(--accent-cool)','élevée':'var(--danger)'};
     const profilBadge = (typeCycliste && !isBiere)
-      ? `<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(0,255,178,0.06);border:1px solid rgba(0,255,178,0.15);border-radius:20px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">✓ Profil ${typeCycliste} pris en compte</div>`
+      ? `<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(0,255,178,0.06);border:1px solid rgba(0,255,178,0.15);border-radius:20px;padding:4px 10px;font-family:JetBrains Mono,monospace;font-size:9px;color:var(--accent);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">✓ Profil ${typeCycliste} pris en compte</div>`
       : '';
 
     // Bannière sans mention IA
@@ -1598,7 +1610,9 @@ Types : Repos, Endurance, Seuil, Intensité, Longue. charge = légère/modérée
     recalculerZonesProfil();
     definirObjectifDepuisPlan(plan);
 
-    showToast('Plan généré et sauvegardé ✓');
+    showToast('Plan sauvegardé ✓');
+    activerModePlanActif();
+    majAffichagePhysique();
   } catch(e){
     clearInterval(msgInterval);
     errDiv.textContent='⚠ '+e.message+' — Réessayez.';
@@ -1945,13 +1959,13 @@ function gpxHandleFiles(files) {
     document.getElementById('gpx-dropzone').after(progressEl);
   }
   progressEl.innerHTML = `
-    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-faint);margin-bottom:8px;">
+    <div style="font-family:JetBrains Mono,monospace;font-size:11px;color:var(--ink-faint);margin-bottom:8px;">
       ⏳ Import en cours · <span id="gpx-multi-count">0</span> / ${arr.length} fichiers
     </div>
     <div style="background:var(--line);border-radius:4px;height:4px;overflow:hidden;">
       <div id="gpx-multi-bar" style="height:100%;background:var(--accent);width:0%;transition:width 0.3s;"></div>
     </div>
-    <div id="gpx-multi-log" style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-faint);max-height:120px;overflow-y:auto;"></div>`;
+    <div id="gpx-multi-log" style="margin-top:10px;font-family:JetBrains Mono,monospace;font-size:10px;color:var(--ink-faint);max-height:120px;overflow-y:auto;"></div>`;
 
   gpxTraiterProchain();
 }
@@ -2458,6 +2472,11 @@ window.addEventListener('load',()=>{
   document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
   chargerProfilSauvegarde();
   chargerObjectif();
+  // Si un plan existe déjà, activer le mode plan actif
+  if (localStorage.getItem('wu_plan_v2')) {
+    activerModePlanActif();
+    majAffichagePhysique();
+  }
   majProgression();
   // Zones manuelles sauvegardées ?
   const zonesManu = localStorage.getItem('wu_zones_manuelles');
@@ -2565,6 +2584,154 @@ function selectNote(val) {
     b.style.borderColor = v <= val ? 'var(--accent)' : 'var(--line)';
     b.style.color = v <= val ? 'var(--accent)' : 'var(--ink-dim)';
   });
+}
+
+
+// ── PLAN ACTIF : grisage bouton + bannière ──────────────
+function activerModePlanActif() {
+  const btn = document.getElementById('btn-gen');
+  const banner = document.getElementById('plan-actif-banner');
+  if (btn) {
+    btn.disabled = true;
+    btn.style.background = 'var(--bg-elevated)';
+    btn.style.color = 'var(--ink-faint)';
+    btn.style.boxShadow = 'none';
+    btn.style.transform = 'none';
+    btn.style.cursor = 'not-allowed';
+    btn.textContent = 'Plan en cours';
+  }
+  if (banner) banner.style.display = 'flex';
+}
+
+function annulerPlan() {
+  if (!confirm('Abandonner le plan en cours ? Tu pourras en construire un nouveau.')) return;
+  localStorage.removeItem('wu_plan_v2');
+  // Réinitialiser l'affichage Mon Plan
+  const pe = document.getElementById('plan-empty');
+  const pc = document.getElementById('plan-content');
+  if (pe) pe.style.display = 'block';
+  if (pc) pc.style.display = 'none';
+  // Réinitialiser le résultat générateur
+  const result = document.getElementById('gen-result');
+  const nav = document.getElementById('week-nav');
+  if (result) result.innerHTML = '';
+  if (nav) nav.style.display = 'none';
+  // Réactiver le bouton
+  const btn = document.getElementById('btn-gen');
+  const banner = document.getElementById('plan-actif-banner');
+  if (btn) {
+    btn.disabled = false;
+    btn.style.background = '';
+    btn.style.color = '';
+    btn.style.boxShadow = '';
+    btn.style.transform = '';
+    btn.style.cursor = '';
+    btn.textContent = 'Construire mon plan';
+  }
+  if (banner) banner.style.display = 'none';
+  // Réinitialiser dashboard
+  const nextEmpty = document.getElementById('next-session-empty');
+  const nextContent = document.getElementById('next-session-content');
+  if (nextEmpty) nextEmpty.style.display = 'flex';
+  if (nextContent) nextContent.style.display = 'none';
+  showToast('Plan abandonné — tu peux en construire un nouveau');
+}
+
+// ── AFFICHAGE W/KG + ZONES dans profil ──────────────────
+function majAffichagePhysique() {
+  const profil = JSON.parse(localStorage.getItem('wu_profil') || '{}');
+  // Prendre les valeurs du formulaire si renseignées, sinon profil sauvegardé
+  const fcmax = parseInt(document.getElementById('p-fcmax')?.value || profil.fcmax) || 0;
+  const ftp   = parseInt(document.getElementById('p-ftp')?.value   || profil.ftp)   || 0;
+  const poids = parseInt(document.getElementById('p-poids')?.value || profil.poids) || 0;
+  const fcRepos = parseInt(document.getElementById('p-fc-repos')?.value || profil.fcRepos) || 0;
+
+  const dashboard = document.getElementById('physique-dashboard');
+  const hasSomething = fcmax > 0 || ftp > 0;
+  if (!dashboard) return;
+  if (!hasSomething) { dashboard.style.display = 'none'; return; }
+  dashboard.style.display = 'block';
+
+  // W/kg
+  const wkgBlock = document.getElementById('wkg-block');
+  const wkgVal = document.getElementById('wkg-val');
+  const wkgCat = document.getElementById('wkg-cat');
+  if (ftp > 0 && poids > 0) {
+    const wkg = (ftp / poids).toFixed(2);
+    const cats = [[2.5,'Débutant'],[3.2,'Loisir confirmé'],[3.8,'Intermédiaire'],[4.5,'Amateur avancé'],[5.5,'Élite amateur'],[99,'Niveau pro']];
+    const cat = cats.find(c => parseFloat(wkg) < c[0]);
+    if (wkgVal) wkgVal.textContent = wkg;
+    if (wkgCat) wkgCat.textContent = '· ' + (cat ? cat[1] : 'Niveau pro');
+    if (wkgBlock) wkgBlock.style.display = 'block';
+  } else {
+    if (wkgBlock) wkgBlock.style.display = 'none';
+  }
+
+  // Zones FC
+  const zonesFCBlock = document.getElementById('zones-fc-block');
+  const zonesFCTable = document.getElementById('zones-fc-table');
+  const zonesFCMethode = document.getElementById('zones-fc-methode');
+  if (fcmax > 0 && zonesFCTable) {
+    let zones = [];
+    if (fcRepos > 0) {
+      // Karvonen
+      const r = fcmax - fcRepos;
+      zones = [
+        {z:'Z1',nom:'Récupération active', min:0, max:Math.round(fcRepos + r*0.60), col:'#4ade80'},
+        {z:'Z2',nom:'Endurance aérobie',   min:Math.round(fcRepos + r*0.60), max:Math.round(fcRepos + r*0.70), col:'#86efac'},
+        {z:'Z3',nom:'Tempo / Grey zone',   min:Math.round(fcRepos + r*0.70), max:Math.round(fcRepos + r*0.80), col:'#fbbf24'},
+        {z:'Z4',nom:'Seuil lactate',       min:Math.round(fcRepos + r*0.80), max:Math.round(fcRepos + r*0.90), col:'#f97316'},
+        {z:'Z5',nom:'VO2max',              min:Math.round(fcRepos + r*0.90), max:fcmax, col:'#ef4444'},
+      ];
+      if (zonesFCMethode) zonesFCMethode.textContent = 'Zones FC — méthode Karvonen (FC réserve)';
+    } else {
+      zones = [
+        {z:'Z1',nom:'Récupération active', min:0,                           max:Math.round(fcmax*0.60), col:'#4ade80'},
+        {z:'Z2',nom:'Endurance aérobie',   min:Math.round(fcmax*0.60), max:Math.round(fcmax*0.70), col:'#86efac'},
+        {z:'Z3',nom:'Tempo / Grey zone',   min:Math.round(fcmax*0.70), max:Math.round(fcmax*0.80), col:'#fbbf24'},
+        {z:'Z4',nom:'Seuil lactate',       min:Math.round(fcmax*0.80), max:Math.round(fcmax*0.90), col:'#f97316'},
+        {z:'Z5',nom:'VO2max',              min:Math.round(fcmax*0.90), max:fcmax, col:'#ef4444'},
+      ];
+      if (zonesFCMethode) zonesFCMethode.textContent = 'Zones FC — méthode % FCmax';
+    }
+    zonesFCTable.innerHTML = zones.map(z =>
+      `<div style="display:flex;align-items:center;gap:8px;font-family:JetBrains Mono,monospace;font-size:10px;">
+        <span style="width:3px;height:28px;background:${z.col};border-radius:2px;flex-shrink:0;"></span>
+        <span style="color:var(--accent);width:20px;">${z.z}</span>
+        <span style="color:var(--ink-dim);flex:1;">${z.nom}</span>
+        <span style="color:var(--ink);">${z.min > 0 ? z.min+' – ' : '< '}${z.max} bpm</span>
+      </div>`
+    ).join('');
+    if (zonesFCBlock) zonesFCBlock.style.display = 'block';
+  } else {
+    if (zonesFCBlock) zonesFCBlock.style.display = 'none';
+  }
+
+  // Zones puissance Coggan
+  const zonesPwrBlock = document.getElementById('zones-power-block');
+  const zonesPwrTable = document.getElementById('zones-power-table');
+  if (ftp > 0 && zonesPwrTable) {
+    const pwrZones = [
+      {z:'Z1',nom:'Récupération',    min:0,                          max:Math.round(ftp*0.55),  col:'#4ade80'},
+      {z:'Z2',nom:'Endurance',       min:Math.round(ftp*0.56),  max:Math.round(ftp*0.75),  col:'#86efac'},
+      {z:'Z3',nom:'Tempo',           min:Math.round(ftp*0.76),  max:Math.round(ftp*0.90),  col:'#fbbf24'},
+      {z:'Z4',nom:'Seuil lactate',   min:Math.round(ftp*0.91),  max:Math.round(ftp*1.05),  col:'#f97316'},
+      {z:'Z5',nom:'VO2max',          min:Math.round(ftp*1.06),  max:Math.round(ftp*1.20),  col:'#ef4444'},
+      {z:'Z6',nom:'Anaérobie',       min:Math.round(ftp*1.21),  max:Math.round(ftp*1.50),  col:'#dc2626'},
+      {z:'Z7',nom:'Neuromusculaire', min:Math.round(ftp*1.51),  max:null,                   col:'#7f1d1d'},
+    ];
+    zonesPwrTable.innerHTML = pwrZones.map(z =>
+      `<div style="display:flex;align-items:center;gap:8px;font-family:JetBrains Mono,monospace;font-size:10px;">
+        <span style="width:3px;height:28px;background:${z.col};border-radius:2px;flex-shrink:0;"></span>
+        <span style="color:var(--accent);width:20px;">${z.z}</span>
+        <span style="color:var(--ink-dim);flex:1;">${z.nom}</span>
+        <span style="color:var(--ink);">${z.min > 0 ? z.min+' – ' : '< '}${z.max !== null ? z.max+'W' : 'max'}</span>
+      </div>`
+    ).join('');
+    if (zonesPwrBlock) zonesPwrBlock.style.display = 'block';
+  } else {
+    if (zonesPwrBlock) zonesPwrBlock.style.display = 'none';
+  }
 }
 
 
