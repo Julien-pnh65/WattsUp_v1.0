@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WattsUp · Conditions Générales d'Utilisation</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-card: #111;
+    --line: rgba(255,255,255,0.07);
+    --accent: #00FFB2;
+    --accent-glow: rgba(0,255,178,0.15);
+    --ink: #e6e4df;
+    --ink-dim: #8a8880;
+    --ink-faint: #444;
+    --danger: #ff4d4d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 300;
+    line-height: 1.8;
+    padding: 0 0 80px;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--line);
+    padding: 32px 40px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .header-logo {
+    font-family: Bebas Neue, sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-shadow: 0 0 20px var(--accent-glow);
+  }
+  .header-sub {
+    font-family: JetBrains Mono, monospace;
+    font-size: 10px;
+    color: var(--ink-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .header-date {
+    font-family: JetBrains Mono, monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-eyebrow {
+    font-family: JetBrains Mono, monospace;
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+  }
+  .hero-title {
+    font-family: Bebas Neue, sans-serif;
+    font-size: clamp(36px, 6vw, 64px);
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .hero-desc {
+    font-size: 15px;
+    color: var(--ink-dim);
+    max-width: 600px;
+    line-height: 1.7;
+  }
+
+  /* CONTAINER */
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* SECTION */
+  .section {
+    padding: 48px 0 0;
+  }
+  .section-num {
+    font-family: JetBrains Mono, monospace;
+    font-size: 9px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: Bebas Neue, sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .section p {
+    font-size: 14px;
+    color: var(--ink-dim);
+    margin-bottom: 14px;
+    line-height: 1.8;
+  }
+  .section p strong {
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .section ul {
+    list-style: none;
+    margin-bottom: 14px;
+  }
+  .section ul li {
+    font-size: 14px;
+    color: var(--ink-dim);
+    padding: 6px 0 6px 16px;
+    position: relative;
+    line-height: 1.7;
+    border-bottom: 1px solid var(--line);
+  }
+  .section ul li:last-child { border-bottom: none; }
+  .section ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-family: JetBrains Mono, monospace;
+    font-size: 10px;
+  }
+
+  /* ALERT BOX */
+  .alert {
+    background: rgba(255,77,77,0.06);
+    border: 1px solid rgba(255,77,77,0.2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .alert-title {
+    font-family: JetBrains Mono, monospace;
+    font-size: 10px;
+    color: var(--danger);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .alert p {
+    color: rgba(255,200,200,0.7) !important;
+    font-size: 13px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* INFO BOX */
+  .info {
+    background: rgba(0,255,178,0.04);
+    border: 1px solid rgba(0,255,178,0.12);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .info-title {
+    font-family: JetBrains Mono, monospace;
+    font-size: 10px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .info p {
+    color: rgba(0,255,178,0.6) !important;
+    font-size: 13px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* CONTACT */
+  .contact-block {
+    margin-top: 48px;
+    padding: 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .contact-block .section-num { margin-bottom: 12px; }
+  .contact-line {
+    font-family: JetBrains Mono, monospace;
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-bottom: 6px;
+  }
+  .contact-line span { color: var(--ink); }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 60px;
+    padding: 24px 40px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-copy {
+    font-family: JetBrains Mono, monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+  .footer-version {
+    font-family: JetBrains Mono, monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  @media (max-width: 600px) {
+    .header, .hero, .footer { padding-left: 20px; padding-right: 20px; }
+    .container { padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-logo">WattsUp</div>
+    <div class="header-sub">Conditions Générales d'Utilisation</div>
+  </div>
+  <div class="header-date">Version bêta · Mai 2025</div>
+</div>
+
+<div class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Document légal</div>
+    <div class="hero-title">Conditions Générales<br>d'Utilisation</div>
+    <div class="hero-desc">En utilisant WattsUp, vous acceptez les conditions décrites ci-dessous. Lisez-les attentivement — elles sont rédigées pour être comprises, pas pour être ignorées.</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 01 -->
+  <div class="section">
+    <div class="section-num">01</div>
+    <div class="section-title">Présentation de l'application</div>
+    <p>WattsUp est une application web de coaching cyclisme permettant de construire des programmes d'entraînement personnalisés basés sur les données physiologiques de l'utilisateur (FC max, FTP, poids, niveau, objectifs).</p>
+    <p>L'application est développée et maintenue par <strong>Julien Peynaud</strong>, à titre personnel, dans le cadre d'un projet indépendant. WattsUp est actuellement en phase <strong>bêta</strong> — elle est fournie gratuitement et en l'état, sans garantie de disponibilité permanente.</p>
+    <div class="info">
+      <div class="info-title">Version bêta</div>
+      <p>L'application est en cours de développement actif. Des fonctionnalités peuvent évoluer, être modifiées ou retirées sans préavis. Merci de votre compréhension.</p>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="section">
+    <div class="section-num">02</div>
+    <div class="section-title">Acceptation des conditions</div>
+    <p>L'utilisation de WattsUp implique l'acceptation pleine et entière des présentes Conditions Générales d'Utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser l'application.</p>
+    <p>Ces conditions peuvent être mises à jour à tout moment. La date de dernière modification est indiquée en haut de ce document.</p>
+  </div>
+
+  <!-- 03 -->
+  <div class="section">
+    <div class="section-num">03</div>
+    <div class="section-title">Nature des programmes générés</div>
+    <div class="alert">
+      <div class="alert-title">Important — à lire absolument</div>
+      <p>Les programmes d'entraînement produits par WattsUp sont générés automatiquement à partir des données que vous renseignez. Ils ne constituent en aucun cas un avis médical, une prescription sportive ou un suivi par un coach certifié.</p>
+    </div>
+    <p>Les programmes sont construits sur la base de méthodes reconnues dans le monde du cyclisme (Andrew Coggan, Stephen Seiler, Joe Friel), mais ils ne tiennent pas compte de certains facteurs individuels importants :</p>
+    <ul>
+      <li>L'état de fatigue ou de récupération au moment de la génération</li>
+      <li>La qualité du sommeil</li>
+      <li>Le stress psychologique ou professionnel</li>
+      <li>Les antécédents médicaux ou blessures en cours</li>
+      <li>Les variations hormonales ou métaboliques</li>
+    </ul>
+    <p><strong>Ces facteurs peuvent significativement altérer la pertinence du programme généré.</strong> L'utilisateur reste seul responsable de l'adaptation de son entraînement à son état du moment.</p>
+    <p>En cas de doute, de douleur, de pathologie cardiovasculaire ou de condition médicale particulière, il est fortement recommandé de consulter un médecin ou un coach sportif certifié avant de suivre tout programme d'entraînement intensif.</p>
+  </div>
+
+  <!-- 04 -->
+  <div class="section">
+    <div class="section-num">04</div>
+    <div class="section-title">Données personnelles et confidentialité</div>
+    <div class="info">
+      <div class="info-title">Vos données restent sur votre appareil</div>
+      <p>Toutes les données que vous saisissez dans WattsUp (profil, FC max, FTP, poids, historique de sorties) sont stockées uniquement en local sur votre appareil via le localStorage de votre navigateur. Elles ne sont pas envoyées ni stockées sur nos serveurs.</p>
+    </div>
+    <p>Le seul échange avec un serveur externe concerne la <strong>génération des programmes</strong> : les paramètres de votre profil et vos préférences d'entraînement sont transmis à un service tiers (Cloudflare Workers) pour produire votre plan. Ces données ne sont pas conservées après le traitement.</p>
+    <p>Conformément au Règlement Général sur la Protection des Données (RGPD — Règlement UE 2016/679), vous disposez des droits suivants :</p>
+    <ul>
+      <li>Droit d'accès à vos données</li>
+      <li>Droit de rectification</li>
+      <li>Droit à l'effacement (vos données locales peuvent être supprimées en vidant le cache de votre navigateur)</li>
+      <li>Droit d'opposition au traitement</li>
+    </ul>
+    <p>Pour toute question relative à vos données, contactez : <strong>wattsup.app@gmail.com</strong></p>
+  </div>
+
+  <!-- 05 -->
+  <div class="section">
+    <div class="section-num">05</div>
+    <div class="section-title">Responsabilité</div>
+    <p>WattsUp et son développeur ne sauraient être tenus responsables :</p>
+    <ul>
+      <li>Des blessures, accidents ou problèmes de santé survenant lors de la pratique d'un programme généré par l'application</li>
+      <li>De l'inadaptation d'un programme à l'état physique réel de l'utilisateur au moment de son utilisation</li>
+      <li>Des interruptions de service, pertes de données ou dysfonctionnements techniques</li>
+      <li>Des décisions prises par l'utilisateur sur la base des informations fournies par l'application</li>
+    </ul>
+    <p>L'utilisateur utilise WattsUp sous sa propre responsabilité et en toute connaissance de cause.</p>
+  </div>
+
+  <!-- 06 -->
+  <div class="section">
+    <div class="section-num">06</div>
+    <div class="section-title">Propriété intellectuelle</div>
+    <p>WattsUp, son code source, son design, ses textes et son nom sont protégés par le droit d'auteur (article L111-1 du Code de la propriété intellectuelle français).</p>
+    <p><strong>© 2025 Julien Peynaud — Tous droits réservés.</strong></p>
+    <p>Toute reproduction, copie, modification ou distribution de l'application, de son code ou de son design, même partielle, est strictement interdite sans autorisation écrite préalable.</p>
+  </div>
+
+  <!-- 07 -->
+  <div class="section">
+    <div class="section-num">07</div>
+    <div class="section-title">Utilisation acceptable</div>
+    <p>En utilisant WattsUp, vous vous engagez à :</p>
+    <ul>
+      <li>Ne pas tenter de contourner les limitations techniques de l'application</li>
+      <li>Ne pas utiliser l'application à des fins commerciales sans autorisation</li>
+      <li>Ne pas reproduire ou distribuer les programmes générés à des fins lucratives</li>
+      <li>Fournir des informations exactes dans votre profil pour obtenir des programmes adaptés</li>
+    </ul>
+  </div>
+
+  <!-- 08 -->
+  <div class="section">
+    <div class="section-num">08</div>
+    <div class="section-title">Droit applicable</div>
+    <p>Les présentes CGU sont soumises au droit français. En cas de litige, et à défaut de résolution amiable, les tribunaux français seront seuls compétents.</p>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-block">
+    <div class="section-num">Contact</div>
+    <div class="contact-line">Développeur · <span>Julien Peynaud</span></div>
+    <div class="contact-line">Email · <span>wattsup.app@gmail.com</span></div>
+    <div class="contact-line">Application · <span>WattsUp — Cycling Coach</span></div>
+    <div class="contact-line">Hébergement · <span>GitHub Pages (Microsoft) · Cloudflare Workers</span></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-copy">© 2025 Julien Peynaud · WattsUp</div>
+  <div class="footer-version">CGU v1.0 · Mai 2025 · Droit français applicable</div>
+</div>
+
+</body>
+</html>
